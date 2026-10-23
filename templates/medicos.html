@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h3>Cadastrar Novo Médico</h3>
+    <form action="/adicionar_medico" method="POST">
+        <input type="text" name="nome" placeholder="Nome Completo do Médico" maxlength="150" required>
+        <input type="text" name="cpf" placeholder="CPF do Médico" maxlength="14" required>
+        <input type="text" name="crm" placeholder="CRM (ex: CRM/SP 123456)" maxlength="20" required>
+        <input type="text" name="telefone" placeholder="Telefone" maxlength="20">
+        <input type="email" name="email" placeholder="E-mail" maxlength="120">
+        <button type="submit">Salvar Médico</button>
+    </form>
+
+    <h4>Médicos Cadastrados</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>ID Médico</th>
+                <th>CRM</th>
+                <th>Nome do Médico</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in medicos %}
+            <tr>
+                <td>{{ m.id_medico }}</td>
+                <td>{{ m.crm }}</td>
+                <td>{{ m.profissional_obj.nome if m.profissional_obj else 'Sem Nome' }}</td>
+                <td>
+                    <a href="{{ url_for('deletar_medico', id=m.id_medico) }}" 
+                       onclick="return confirm('Tem certeza que deseja remover este médico?')"
+                       style="color: #ef4444; font-weight: 600; text-decoration: none;">
+                        ❌ Remover
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" style="text-align: center;">Nenhum médico cadastrado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

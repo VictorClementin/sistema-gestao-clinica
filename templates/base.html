@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão - Clínica Médica</title>
+    <!-- Importação do CSS centralizado -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>🏥 Clínica Médica</h2>
+        
+        <!-- Menu de Navegação Global -->
+        <nav class="navbar">
+            <a href="{{ url_for('index') }}">Dashboard</a>
+            <a href="{{ url_for('pacientes') }}">Pacientes</a>
+            <a href="{{ url_for('medicos') }}">Médicos</a>
+            <a href="{{ url_for('agendamentos') }}">Agendamentos</a>
+        </nav>
+
+        <!-- Injeção de conteúdo das telas filhas -->
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

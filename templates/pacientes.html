@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h3>Cadastrar Novo Paciente</h3>
+    <form action="/adicionar_paciente" method="POST">
+        <input type="text" name="cpf" placeholder="CPF (ex: 000.000.000-00)" maxlength="14" required>
+        <input type="text" name="nome" placeholder="Nome Completo do Paciente" maxlength="150" required>
+        <input type="text" name="telefone" placeholder="Telefone (ex: 11 99999-9999)" maxlength="20">
+        <input type="email" name="email" placeholder="E-mail" maxlength="120">
+        <button type="submit">Salvar Paciente</button>
+    </form>
+
+    <h4>Pacientes Cadastrados</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>CPF</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in pacientes %}
+            <tr>
+                <td>{{ p.id_paciente }}</td>
+                <td>{{ p.cpf }}</td>
+                <td>{{ p.nome }}</td>
+                <td>{{ p.telefone }}</td>
+                <td>
+                    <a href="{{ url_for('deletar_paciente', id=p.id_paciente) }}" 
+                       onclick="return confirm('Tem certeza que deseja remover este paciente?')"
+                       style="color: #ef4444; font-weight: 600; text-decoration: none;">
+                        ❌ Remover
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" style="text-align: center;">Nenhum paciente cadastrado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

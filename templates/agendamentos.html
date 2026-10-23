@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h3>Agendar Consulta</h3>
+    <form action="/adicionar_agendamento" method="POST">
+        <select name="id_paciente" required>
+            <option value="">Selecione o Paciente</option>
+            {% for p in pacientes %}
+            <option value="{{ p.id_paciente }}">{{ p.nome }} (CPF: {{ p.cpf }})</option>
+            {% endfor %}
+        </select>
+
+        <select name="id_medico" required>
+            <option value="">Selecione o Médico</option>
+            {% for m in medicos %}
+            <option value="{{ m.id_medico }}">
+                Dr(a). {{ m.profissional_obj.nome if m.profissional_obj else 'Médico' }} - CRM: {{ m.crm }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <input type="date" name="data" required>
+        <!-- Seletor nativo de relógio do navegador -->
+        <input type="time" name="horario" required>
+        <input type="text" name="observacoes" placeholder="Observações (ex: Consulta de rotina)" maxlength="200">
+        <button type="submit">Confirmar Agendamento</button>
+    </form>
+
+    <h4>Consultas Agendadas</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Paciente</th>
+                <th>Médico</th>
+                <th>Data</th>
+                <th>Horário</th>
+                <th>Observação</th>
+                <th>Situação</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in agendamentos %}
+            <tr>
+                <td>{{ a.id_agendamento }}</td>
+                <td>{{ a.paciente_obj.nome if a.paciente_obj else 'ID ' ~ a.id_paciente }}</td>
+                <td>{{ a.medico_obj.profissional_obj.nome if a.medico_obj and a.medico_obj.profissional_obj else 'ID ' ~ a.id_medico }}</td>
+                <td>{{ a.data_agendamento }}</td>
+                <td>{{ a.horario }}</td>
+                <td>{{ a.observacoes }}</td>
+                <td>{{ a.situacao }}</td>
+                <td>
+                    <a href="{{ url_for('deletar_agendamento', id=a.id_agendamento) }}" 
+                       onclick="return confirm('Tem certeza que deseja apagar este agendamento?')"
+                       style="color: #ef4444; font-weight: 600; text-decoration: none;">
+                        ❌ Cancelar
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="8" style="text-align: center;">Nenhum agendamento realizado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
