@@ -1,66 +1,73 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card">
-    <h3>Agendar Consulta</h3>
-    <form action="/adicionar_agendamento" method="POST">
-        <select name="id_paciente" required>
-            <option value="">Selecione o Paciente</option>
-            {% for p in pacientes %}
-            <option value="{{ p.id_paciente }}">{{ p.nome }} (CPF: {{ p.cpf }})</option>
-            {% endfor %}
-        </select>
+<div style="background: white; padding: 20px; border-radius: 8px;">
+    <h2 style="color: #1d3557;">Agendar Consulta</h2>
+    
+    <form action="/agendamentos" method="POST" style="margin-bottom: 30px;">
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <select name="paciente_id" required style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="">Selecione o Paciente</option>
+                {% for p in pacientes %}
+                <option value="{{ p.id }}">{{ p.nome }} (CPF: {{ p.cpf }})</option>
+                {% endfor %}
+            </select>
 
-        <select name="id_medico" required>
-            <option value="">Selecione o Médico</option>
-            {% for m in medicos %}
-            <option value="{{ m.id_medico }}">
-                Dr(a). {{ m.profissional_obj.nome if m.profissional_obj else 'Médico' }} - CRM: {{ m.crm }}
-            </option>
-            {% endfor %}
-        </select>
+            <select name="medico_id" required style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="">Selecione o Médico</option>
+                {% for m in medicos %}
+                <option value="{{ m.id }}">Dr(a). {{ m.nome }} (CRM: {{ m.crm }})</option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <input type="date" name="data" required>
-        <!-- Seletor nativo de relógio do navegador -->
-        <input type="time" name="horario" required>
-        <input type="text" name="observacoes" placeholder="Observações (ex: Consulta de rotina)" maxlength="200">
-        <button type="submit">Confirmar Agendamento</button>
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <input type="date" name="data" required style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="time" name="horario" required style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="text" name="observacao" placeholder="Observações (ex: Consulta de rotina)" maxlength="200" style="flex: 2; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+
+        <button type="submit" style="background: #1d3557; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+            Confirmar Agendamento
+        </button>
     </form>
 
-    <h4>Consultas Agendadas</h4>
-    <table>
+    <h3 style="color: #1d3557;">Consultas Agendadas</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Paciente</th>
-                <th>Médico</th>
-                <th>Data</th>
-                <th>Horário</th>
-                <th>Observação</th>
-                <th>Situação</th>
-                <th>Ação</th>
+            <tr style="background-color: #1d3557; color: white;">
+                <th style="padding: 10px; text-align: left;">ID</th>
+                <th style="padding: 10px; text-align: left;">Paciente</th>
+                <th style="padding: 10px; text-align: left;">Médico</th>
+                <th style="padding: 10px; text-align: left;">Data</th>
+                <th style="padding: 10px; text-align: left;">Horário</th>
+                <th style="padding: 10px; text-align: left;">Observação</th>
+                <th style="padding: 10px; text-align: left;">Situação</th>
+                <th style="padding: 10px; text-align: center;">Ação</th>
             </tr>
         </thead>
         <tbody>
             {% for a in agendamentos %}
-            <tr>
-                <td>{{ a.id_agendamento }}</td>
-                <td>{{ a.paciente_obj.nome if a.paciente_obj else 'ID ' ~ a.id_paciente }}</td>
-                <td>{{ a.medico_obj.profissional_obj.nome if a.medico_obj and a.medico_obj.profissional_obj else 'ID ' ~ a.id_medico }}</td>
-                <td>{{ a.data_agendamento }}</td>
-                <td>{{ a.horario }}</td>
-                <td>{{ a.observacoes }}</td>
-                <td>{{ a.situacao }}</td>
-                <td>
-                    <a href="{{ url_for('deletar_agendamento', id=a.id_agendamento) }}" 
-                       onclick="return confirm('Tem certeza que deseja apagar este agendamento?')"
-                       style="color: #ef4444; font-weight: 600; text-decoration: none;">
-                        ❌ Cancelar
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">{{ a.id }}</td>
+                <td style="padding: 10px;">{{ a.paciente.nome if a.paciente else 'Paciente Removido' }}</td>
+                <td style="padding: 10px;">Dr(a). {{ a.medico.nome if a.medico else 'Médico Removido' }}</td>
+                <td style="padding: 10px;">{{ a.data }}</td>
+                <td style="padding: 10px;">{{ a.horario }}</td>
+                <td style="padding: 10px;">{{ a.observacao }}</td>
+                <td style="padding: 10px;">{{ a.situacao or 'Agendado' }}</td>
+                <td style="padding: 10px; text-align: center;">
+                    <a href="{{ url_for('deletar_agendamento', id=a.id) }}" 
+                       onclick="return confirm('Tem certeza que deseja cancelar este agendamento?')"
+                       style="color: red; text-decoration: none; font-weight: bold;">
+                        Cancelar
                     </a>
                 </td>
             </tr>
             {% else %}
-            <tr><td colspan="8" style="text-align: center;">Nenhum agendamento realizado.</td></tr>
+            <tr>
+                <td colspan="8" style="padding: 15px; text-align: center; color: #666;">Nenhum agendamento realizado.</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>

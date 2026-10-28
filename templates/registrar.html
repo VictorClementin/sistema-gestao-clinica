@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Criar Conta</title>
+    <style>
+        body { font-family: Arial; background-color: #eef2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background-color: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; width: 350px; }
+        .login-box input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .login-box button { width: 100%; padding: 10px; background-color: #457b9d; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Cadastrar Usuário</h2>
+        <form action="/registrar" method="POST">
+            <input type="text" name="usuario" placeholder="Crie um nome de usuário" required>
+            <input type="password" name="senha" placeholder="Crie uma senha" required>
+            <button type="submit">Cadastrar</button>
+        </form>
+        <p style="margin-top: 15px;"><a href="/" style="color: #666; font-size: 14px;">Voltar para o Login</a></p>
+    </div>
+</body>
+</html>

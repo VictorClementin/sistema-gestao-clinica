@@ -1,43 +1,52 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="card">
-    <h3>Cadastrar Novo Médico</h3>
-    <form action="/adicionar_medico" method="POST">
-        <input type="text" name="nome" placeholder="Nome Completo do Médico" maxlength="150" required>
-        <input type="text" name="cpf" placeholder="CPF do Médico" maxlength="14" required>
-        <input type="text" name="crm" placeholder="CRM (ex: CRM/SP 123456)" maxlength="20" required>
-        <input type="text" name="telefone" placeholder="Telefone" maxlength="20">
-        <input type="email" name="email" placeholder="E-mail" maxlength="120">
-        <button type="submit">Salvar Médico</button>
+<div style="background: white; padding: 20px; border-radius: 8px;">
+    <h2 style="color: #1d3557;">Cadastro de Médicos</h2>
+
+    <form action="/medicos" method="POST" style="margin-bottom: 30px;">
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <input type="text" name="nome" placeholder="Nome do Médico" required style="flex: 2; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="text" name="crm" placeholder="CRM" required style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <input type="text" name="cpf" placeholder="CPF" style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="text" name="telefone" placeholder="Telefone" style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="email" name="email" placeholder="E-mail" style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+        <button type="submit" style="background: #1d3557; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+            Cadastrar Médico
+        </button>
     </form>
 
-    <h4>Médicos Cadastrados</h4>
-    <table>
+    <h3 style="color: #1d3557;">Médicos Cadastrados</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
         <thead>
-            <tr>
-                <th>ID Médico</th>
-                <th>CRM</th>
-                <th>Nome do Médico</th>
-                <th>Ação</th>
+            <tr style="background-color: #1d3557; color: white;">
+                <th style="padding: 10px; text-align: left;">ID</th>
+                <th style="padding: 10px; text-align: left;">Nome</th>
+                <th style="padding: 10px; text-align: left;">CRM</th>
+                <th style="padding: 10px; text-align: left;">Telefone</th>
+                <th style="padding: 10px; text-align: center;">Ação</th>
             </tr>
         </thead>
         <tbody>
-            {% for m in medicos %}
-            <tr>
-                <td>{{ m.id_medico }}</td>
-                <td>{{ m.crm }}</td>
-                <td>{{ m.profissional_obj.nome if m.profissional_obj else 'Sem Nome' }}</td>
-                <td>
-                    <a href="{{ url_for('deletar_medico', id=m.id_medico) }}" 
-                       onclick="return confirm('Tem certeza que deseja remover este médico?')"
-                       style="color: #ef4444; font-weight: 600; text-decoration: none;">
-                        ❌ Remover
-                    </a>
+            {% for medico in medicos %}
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">{{ medico.id }}</td>
+                <td style="padding: 10px;">{{ medico.nome }}</td>
+                <td style="padding: 10px;">{{ medico.crm }}</td>
+                <td style="padding: 10px;">{{ medico.telefone }}</td>
+                <td style="padding: 10px; text-align: center;">
+                    <a href="{{ url_for('deletar_medico', id=medico.id) }}" style="color: red; text-decoration: none; font-weight: bold;">Excluir</a>
                 </td>
             </tr>
             {% else %}
-            <tr><td colspan="4" style="text-align: center;">Nenhum médico cadastrado.</td></tr>
+            <tr>
+                <td colspan="5" style="padding: 15px; text-align: center; color: #666;">
+                    Nenhum médico cadastrado ainda.
+                </td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>

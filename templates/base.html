@@ -13,10 +13,12 @@
         
         <!-- Menu de Navegação Global -->
         <nav class="navbar">
-            <a href="{{ url_for('index') }}">Dashboard</a>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
             <a href="{{ url_for('pacientes') }}">Pacientes</a>
             <a href="{{ url_for('medicos') }}">Médicos</a>
             <a href="{{ url_for('agendamentos') }}">Agendamentos</a>
+            <a href="{{ url_for('historico') }}">Histórico</a>
+            <a href="{{ url_for('sair') }}">Sair</a>
         </nav>
 
         <!-- Injeção de conteúdo das telas filhas -->
